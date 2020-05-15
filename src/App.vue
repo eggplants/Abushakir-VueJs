@@ -6,8 +6,7 @@
           <v-row align="center" justify="center">
             <div>
               <span class="display-2 font-weight-bold button--text">
-                Abush
-                <span class="font-weight-thin">akir</span>
+                Abush<span class="font-weight-thin">akir</span>
                 <span class="headline">Js</span>
               </span>
             </div>
@@ -35,6 +34,7 @@
 
 <script>
 // import HelloWorld from "./components/HelloWorld";
+import { ETC, EtDatetime } from "abushakir";
 import calendar from "./components/Calendar";
 import notifications from "@/components/NotificationCard";
 
@@ -42,13 +42,22 @@ export default {
   name: "App",
 
   components: {
-    // HelloWorld,
     calendar,
     notifications
   },
 
   data: () => ({
-    backgroundImage: require("@/assets/logo.svg")
-  })
+    backgroundImage: require("@/assets/logo.svg"),
+    thisMonth: null
+  }),
+  created() {
+    this.init()
+  },
+  methods: {
+    init(){
+      this.thisMonth = new ETC(new EtDatetime().year)
+
+    }
+  }
 };
 </script>

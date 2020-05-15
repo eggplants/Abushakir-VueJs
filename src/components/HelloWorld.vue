@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { etctime, ETC, EtDatetime } from "abushakir";
+import { ETC, EtDatetime } from "abushakir";
 export default {
   data: () => ({
     toggle_months: this.etc.allMonths.indexof(this.toMonthGeez)

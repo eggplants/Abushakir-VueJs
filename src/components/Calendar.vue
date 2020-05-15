@@ -5,7 +5,9 @@
         <v-col cols="6" align="start">
           <span class="font-weight-regular">Friday</span>
           <div>
-            <span class="display-1 font-weight-thin">May 15, 2020</span>
+            <span
+              class="display-1 font-weight-thin"
+            >{{ months[monthGeez] }} {{ nums[date.day] }} ፣ {{ date.year }}</span>
           </div>
         </v-col>
         <!-- Buttons -->
@@ -26,7 +28,7 @@
                   <v-icon color="primary lighten-5" x-large>mdi-chevron-right</v-icon>
                 </v-btn>
               </template>
-              <span>{{ nextMonth[idx] }}</span>
+              <span>{{ nextMon[idx] }}</span>
             </v-tooltip>
           </v-row>
         </v-col>
@@ -34,7 +36,25 @@
     </v-card-title>
     <v-card-text>
       <v-row align="center" justify="start" class="mx-auto">
-        <template v-for="i in 30">
+        <template v-for="i in monthStartDay">
+          <v-btn
+            disabled
+            icon
+            :key="i"
+            large
+            width="11%"
+            fab
+            class="ma-2 elevation-3"
+            :class="i == 28 ? 'error' : 'button'"
+          >
+            <v-row class="mx-auto" justify="center" align="center">
+              <div>
+                <span class="title grey--text" color="">{{ (prevMonth.monthDays().length - monthStartDay) + i }}</span>
+              </div>
+            </v-row>
+          </v-btn>
+        </template>
+        <template v-for="i in thisMonth">
           <v-btn
             icon
             :key="i"
@@ -46,7 +66,7 @@
           >
             <v-row class="mx-auto" justify="center" align="center">
               <div>
-                <span class="title white--text">{{i}}</span>
+                <span class="title white--text">{{i[2]}}</span>
               </div>
             </v-row>
           </v-btn>
@@ -57,14 +77,51 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from "vuex";
+import { ETC, EtDatetime } from "abushakir";
 export default {
   data() {
     return {
       idx: 0,
       lastMonth: ["ያለፈው ወር", "Last Month"],
-      nextMonth: ["ቀጣይ ወር", "Next Month"],
+      nextMon: ["ቀጣይ ወር", "Next Month"],
+      months: [],
+      nums: []
     };
   },
-  computed: {}
+  computed: {
+    ...mapState("etc", [
+      "thisMonth",
+      "nextMonth",
+      "prevMonth",
+      "today",
+      "date",
+      "monthGeez",
+      "monthStartDay"
+    ])
+  },
+  created() {
+    this.init();
+  },
+  methods: {
+    ...mapMutations("etc", [
+      "setThisMonth",
+      "setNextMonth",
+      "setPrevMonth",
+      "setToday",
+      "setDate",
+      "setAllDays"
+    ]),
+    init() {
+      let dt = new EtDatetime();
+      let etc = new ETC(dt.year, dt.month, dt.day);
+      this.setThisMonth(etc.monthDays());
+      this.setDate(dt.date);
+      this.months = etc.allMonths;
+      this.nums = etc.dayNumbers;
+      this.setAllDays(etc.monthDays.length);
+      this.setPrevMonth(etc.prevMonth)
+    }
+  }
 };
 </script>
