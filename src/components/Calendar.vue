@@ -3,11 +3,11 @@
     <v-card-title primary-title>
       <v-row class="mx-auto" align="center">
         <v-col cols="6" align="start">
-          <span class="font-weight-regular">Friday</span>
+          <span class="font-weight-regular">{{ weekdays[weekday -1] }}</span>
           <div>
             <span
               class="display-1 font-weight-thin"
-            >{{ months[monthGeez-1] }} {{ nums[date.day] }} ፣ {{ date.year }}</span>
+            >{{ months[monthGeez-1] }} {{ nums[date.day-1] }} ፣ {{ date.year }}</span>
           </div>
         </v-col>
         <!-- Buttons -->
@@ -34,16 +34,16 @@
         </v-col>
       </v-row>
     </v-card-title>
-    <v-card-text>
-      <v-row justify="space-around" class="px-3">
-        <v-flex v-for="i in weekdays" :key="i" md="1">
-          <div>
-            <span class="grey--text subheading">{{ i[0] }}</span>
-          </div>
-        </v-flex>
+    <v-card-text class="py-0">
+      <v-row align="center" justify="start" class="mx-auto">
+        <template v-for="i in weekdays">
+          <v-btn disabled icon :key="i" large width="11%" fab text class="mx-2">
+            <span class="grey--text subheading">{{ i }}</span>
+          </v-btn>
+        </template>
       </v-row>
     </v-card-text>
-    <v-card-text>
+    <v-card-text class="pt-0">
       <v-row align="center" justify="start" class="mx-auto">
         <template v-for="i in monthStartDay">
           <v-btn
@@ -53,8 +53,8 @@
             large
             width="11%"
             fab
-            class="ma-2 elevation-3"
-            :class="i == 28 ? 'error' : 'button'"
+            outlined
+            class="ma-2"
           >
             <v-row class="mx-auto" justify="center" align="center">
               <div>
@@ -73,8 +73,8 @@
             large
             width="11%"
             fab
-            class="ma-2 elevation-15"
-            :class="i[2] == today ? 'primary' : 'button'"
+            class="ma-2"
+            :class="i[2] == today ? 'primary elevation-20' : 'button elevation-2'"
           >
             <v-row class="mx-auto" justify="center" align="center">
               <div>
@@ -99,6 +99,7 @@ export default {
       nextMon: ["ቀጣይ ወር", "Next Month"],
       months: [],
       nums: [],
+      weekday: "",
       weekdays: []
     };
   },
@@ -128,6 +129,7 @@ export default {
     init() {
       let dt = new EtDatetime();
       let etc = new ETC(dt.year, dt.month, dt.day);
+      this.weekday = dt.weekday
       this.setThisMonth(etc.monthDays());
       this.setDate(dt.date);
       this.months = etc.allMonths;
@@ -135,7 +137,7 @@ export default {
       this.setAllDays(etc.monthDays.length);
       this.setPrevMonth(etc.prevMonth);
       this.weekdays = etc.weekdays;
-      this.setToday(dt.day)
+      this.setToday(dt.day);
     }
   }
 };
