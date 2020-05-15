@@ -7,7 +7,7 @@
           <div>
             <span
               class="display-1 font-weight-thin"
-            >{{ months[monthGeez] }} {{ nums[date.day] }} ፣ {{ date.year }}</span>
+            >{{ months[monthGeez-1] }} {{ nums[date.day] }} ፣ {{ date.year }}</span>
           </div>
         </v-col>
         <!-- Buttons -->
@@ -35,6 +35,15 @@
       </v-row>
     </v-card-title>
     <v-card-text>
+      <v-row justify="space-around" class="px-3">
+        <v-flex v-for="i in weekdays" :key="i" md="1">
+          <div>
+            <span class="grey--text subheading">{{ i[0] }}</span>
+          </div>
+        </v-flex>
+      </v-row>
+    </v-card-text>
+    <v-card-text>
       <v-row align="center" justify="start" class="mx-auto">
         <template v-for="i in monthStartDay">
           <v-btn
@@ -49,7 +58,10 @@
           >
             <v-row class="mx-auto" justify="center" align="center">
               <div>
-                <span class="title grey--text" color="">{{ (prevMonth.monthDays().length - monthStartDay) + i }}</span>
+                <span
+                  class="title grey--text"
+                  color
+                >{{ (prevMonth.monthDays().length - monthStartDay) + i }}</span>
               </div>
             </v-row>
           </v-btn>
@@ -62,7 +74,7 @@
             width="11%"
             fab
             class="ma-2 elevation-15"
-            :class="i == 28 ? 'error' : 'button'"
+            :class="i[2] == today ? 'primary' : 'button'"
           >
             <v-row class="mx-auto" justify="center" align="center">
               <div>
@@ -86,7 +98,8 @@ export default {
       lastMonth: ["ያለፈው ወር", "Last Month"],
       nextMon: ["ቀጣይ ወር", "Next Month"],
       months: [],
-      nums: []
+      nums: [],
+      weekdays: []
     };
   },
   computed: {
@@ -120,7 +133,9 @@ export default {
       this.months = etc.allMonths;
       this.nums = etc.dayNumbers;
       this.setAllDays(etc.monthDays.length);
-      this.setPrevMonth(etc.prevMonth)
+      this.setPrevMonth(etc.prevMonth);
+      this.weekdays = etc.weekdays;
+      this.setToday(dt.day)
     }
   }
 };

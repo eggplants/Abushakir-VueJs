@@ -17,7 +17,7 @@
             </v-col>
             <v-col cols="4">
               <div>
-                <span class="display-1">Notifications</span>
+                <span class="display-1">Events</span>
               </div>
               <v-row align="start" justify="space-between">
                 <v-col cols="12" v-for="i in 2" :key="i">
