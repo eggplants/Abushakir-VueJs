@@ -1,5 +1,10 @@
 <template>
-  <v-card style="border-radius: 20px; position: sticky" min-height="630" color="button" class="pl-2 elevation-20 white--text">
+  <v-card
+    style="border-radius: 20px; position: sticky"
+    min-height="630"
+    color="button"
+    class="pl-2 elevation-20 white--text"
+  >
     <v-card-title primary-title>
       <v-row class="mx-auto" align="center">
         <v-col cols="6" align="start">
@@ -66,7 +71,7 @@
     <v-card-text class="pt-0">
       <v-row align="center" justify="start" class="mx-auto">
         <template v-for="i in monthStartDay">
-          <v-btn disabled icon :key="i"  width="11%" fab outlined class="ma-2">
+          <v-btn disabled icon :key="i" width="11%" large fab outlined class="ma-2">
             <v-row class="mx-auto" justify="center" align="center">
               <div>
                 <span
@@ -81,9 +86,7 @@
           <v-btn
             icon
             :key="i"
-            
-            width="11%"
-            fab
+            width="11%" large fab
             class="ma-2"
             :class="i[0] == today.year && i[1] == today.month && i[2] == today.day ? 'bgd elevation-20' : 'button elevation-2'"
           >
