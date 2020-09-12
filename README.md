@@ -1,5 +1,7 @@
 # abushakir-VueJs
 
+This is a demonstration application to show the usage of [AbushakirJs](https://www.npmjs.com/package/abushakir) package.
+
 ## Project setup
 ```
 npm install
