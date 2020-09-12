@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-content style="background-color: #f9f9f9">
-      <v-img :src="backgroundImage" :height="$vuetify.breakpoint.md ? '':  '100vh'">
+      <v-img :src="backgroundImage">
         <v-container color="primary">
           <v-row align="center" justify="center">
             <div>

@@ -19,7 +19,7 @@
         </v-col>
       </v-row>
     </v-card>
-    <v-card style="border-radius: 10px; overflow:hidden" class="elevation-10 hidden-lg-and-up">
+    <v-card style="border-radius: 5px;" class="elevation-10 hidden-lg-and-up">
       <v-row no-gutters align="center">
         <v-col cols="3" align="center">
           <v-card class="button white--text py-4" width="100%">
