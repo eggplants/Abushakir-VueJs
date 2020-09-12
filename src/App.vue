@@ -6,7 +6,8 @@
           <v-row align="center" justify="center">
             <div>
               <span class="display-2 font-weight-bold button--text">
-                Abush<span class="font-weight-thin">akir</span>
+                Abush
+                <span class="font-weight-thin">akir</span>
                 <span class="headline">Js</span>
               </span>
             </div>
@@ -17,7 +18,7 @@
             </v-col>
             <v-col cols="4">
               <div>
-                <span class="display-1">Events</span>
+                <span class="headline">የ{{ months[monthGeez-1] }} ወር በዓላት እና አፅዋማት</span>
               </div>
               <v-row align="start" justify="space-between">
                 <v-col cols="12" v-for="i in 2" :key="i">
@@ -34,30 +35,51 @@
 
 <script>
 // import HelloWorld from "./components/HelloWorld";
-import { ETC, EtDatetime } from "abushakir";
 import calendar from "./components/Calendar";
 import notifications from "@/components/NotificationCard";
-
+import { mapState, mapMutations } from "vuex";
 export default {
   name: "App",
-
   components: {
     calendar,
-    notifications
+    notifications,
   },
 
   data: () => ({
     backgroundImage: require("@/assets/logo.svg"),
-    thisMonth: null
+    thisMonth: null,
   }),
-  created() {
-    this.init()
+  beforeMount() {
+    let dt = new this.$etDT();
+    let etc = new this.$etc(dt.year, dt.month, dt.day);
+    this.init(etc);
+  },
+  computed: {
+    ...mapState("etc", ["monthGeez", "months"]),
   },
   methods: {
-    init(){
-      this.thisMonth = new ETC(new EtDatetime().year)
-
-    }
-  }
+    ...mapMutations("etc", [
+      "setThisMonth",
+      "setNextMonth",
+      "setPrevMonth",
+      "setToday",
+      "setWeekDays",
+      "setDate",
+      "setAllDays",
+      "setWeekday",
+      "setMonthsList",
+    ]),
+    init(etc) {
+      this.setWeekday(etc._date.weekday);
+      this.setThisMonth(etc.monthDays());
+      this.setDate(etc._date.date);
+      this.setMonthsList(etc.allMonths);
+      this.setAllDays(etc.monthDays.length);
+      this.setPrevMonth(etc.prevMonth);
+      this.setNextMonth(etc.nextMonth);
+      this.setWeekDays(etc.weekdays);
+      this.setToday(etc._date.date);
+    },
+  },
 };
 </script>

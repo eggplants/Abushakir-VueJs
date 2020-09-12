@@ -1,5 +1,5 @@
-// import { ETC, EtDatetime } from 'abushakir'
-
+// let dt = new $etDT();
+// let etc = new $etc(this.dt.year, this.dt.month, this.dt.day)
 // initial state
 const state = () => ({
     thisMonth: [],
@@ -9,7 +9,15 @@ const state = () => ({
     date: {},
     monthGeez: "",
     allDays: [],
-    monthStartDay: -1
+    monthStartDay: -1,
+    //
+    // dateTime: dt,
+    // calendar: etc,
+    year: {},
+    month: {},
+    weekdays: [],
+    months: [],
+    weekday: ""
 })
 
 // getters
@@ -34,12 +42,23 @@ const mutations = {
         state.today = today
     },
     setDate(state, date) {
+        console.log(date)
         state.date = date
         state.monthGeez = date.month
     },
-    setAllDays(state, daysList){
+    setAllDays(state, daysList) {
         state.allDays = daysList
+    },
+    setWeekDays(state, list) {
+        state.weekdays = list
+    },
+    setWeekday(state, a) {
+        state.weekday = a;
+    },
+    setMonthsList(state, list) {
+        state.months = list
     }
+
 }
 
 export default {

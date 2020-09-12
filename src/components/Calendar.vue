@@ -1,9 +1,9 @@
 <template>
-  <v-card style="border-radius: 20px;" color="button" class="pl-2 elevation-20 white--text">
+  <v-card style="border-radius: 20px; position: sticky" min-height="630" color="button" class="pl-2 elevation-20 white--text">
     <v-card-title primary-title>
       <v-row class="mx-auto" align="center">
         <v-col cols="6" align="start">
-          <span class="font-weight-regular">{{ weekdays[weekday] }}</span>
+          <span class="font-weight-regular">{{ weekdays[((today.day + weekday) - 1) % 7] }}</span>
           <div>
             <span
               class="display-1 font-weight-thin"
@@ -14,18 +14,18 @@
         <v-col>
           <v-row justify="end" class="mx-auto">
             <!-- Previous Year -->
-            <v-tooltip top>
+            <!-- <v-tooltip top>
               <template v-slot:activator="{ on }">
-                <v-btn icon color="white" v-on="on" @click="prevYear">
+                <v-btn icon color="white" v-on="on" @click="goToPrevYear">
                   <v-icon color="bgd lighten-5">mdi-chevron-double-left</v-icon>
                 </v-btn>
               </template>
               <span>{{ lastYr[idx] }}</span>
-            </v-tooltip>
+            </v-tooltip>-->
             <!-- Previous Month -->
             <v-tooltip top>
               <template v-slot:activator="{ on }">
-                <v-btn icon color="white" v-on="on" class="mx-2" @click="prevMonth">
+                <v-btn icon color="white" v-on="on" @click="goToPrevMonth">
                   <v-icon color="bgd lighten-5">mdi-chevron-left</v-icon>
                 </v-btn>
               </template>
@@ -35,21 +35,21 @@
             <!-- Previous Month -->
             <v-tooltip top>
               <template v-slot:activator="{ on }">
-                <v-btn icon color="white" v-on="on" class="mx-2" @click="nextMonth">
+                <v-btn icon color="white" v-on="on" @click="goToNextMonth">
                   <v-icon color="bgd lighten-5">mdi-chevron-right</v-icon>
                 </v-btn>
               </template>
               <span>{{ nextMon[idx] }}</span>
             </v-tooltip>
             <!-- Next Year -->
-            <v-tooltip top>
+            <!-- <v-tooltip top>
               <template v-slot:activator="{ on }">
-                <v-btn icon color="white" v-on="on" @click="nextYear">
+                <v-btn icon color="white" v-on="on" @click="goToNextYear">
                   <v-icon color="bgd lighten-5">mdi-chevron-double-right</v-icon>
                 </v-btn>
               </template>
               <span>{{ nextYr[idx] }}</span>
-            </v-tooltip>
+            </v-tooltip>-->
           </v-row>
         </v-col>
       </v-row>
@@ -66,7 +66,7 @@
     <v-card-text class="pt-0">
       <v-row align="center" justify="start" class="mx-auto">
         <template v-for="i in monthStartDay">
-          <v-btn disabled icon :key="i" large width="11%" fab outlined class="ma-2">
+          <v-btn disabled icon :key="i"  width="11%" fab outlined class="ma-2">
             <v-row class="mx-auto" justify="center" align="center">
               <div>
                 <span
@@ -81,17 +81,17 @@
           <v-btn
             icon
             :key="i"
-            large
+            
             width="11%"
             fab
             class="ma-2"
-            :class="i[2] == today ? 'bgd elevation-20' : 'button elevation-2'"
+            :class="i[0] == today.year && i[1] == today.month && i[2] == today.day ? 'bgd elevation-20' : 'button elevation-2'"
           >
             <v-row class="mx-auto" justify="center" align="center">
               <div>
                 <span
                   class="headline"
-                  :class="i[2] == today ? 'button--text' : 'white--text'"
+                  :class="i[0] == today.year && i[1] == today.month && i[2] == today.day ? 'button--text' : 'white--text'"
                 >{{ $converter(i[2]) }}</span>
               </div>
             </v-row>
@@ -112,10 +112,8 @@ export default {
       lastYr: ["ያለፈው ዓመት (አምና)", "Last Year"],
       nextMon: ["ቀጣይ ወር", "Next Month"],
       nextYr: ["ቀጣይ ዓመት", "Next Year"],
-      months: [],
       nums: [],
-      weekday: "",
-      weekdays: [],
+      // weekdays: [],
       dt: null,
       etc: null,
     };
@@ -128,11 +126,14 @@ export default {
       "today",
       "date",
       "monthGeez",
+      "weekdays",
+      "weekday",
       "monthStartDay",
+      "months",
     ]),
   },
   created() {
-    this.init();
+    console.log(this.thisMonth);
   },
   methods: {
     ...mapMutations("etc", [
@@ -140,34 +141,35 @@ export default {
       "setNextMonth",
       "setPrevMonth",
       "setToday",
+      "setWeekDays",
       "setDate",
       "setAllDays",
+      "setWeekday",
+      "setMonthsList",
     ]),
-    init() {
-      this.dt = new this.$etDT();
-      this.etc = new this.$etc(this.dt.year, this.dt.month, this.dt.day);
-      this.weekday = this.dt.weekday;
-      this.setThisMonth(this.etc.monthDays());
-      this.setDate(this.dt.date);
-      this.months = this.etc.allMonths;
-      this.nums = this.etc.dayNumbers;
-      this.setAllDays(this.etc.monthDays.length);
-      this.setPrevMonth(this.etc.prevMonth);
-      this.weekdays = this.etc.weekdays;
-      this.setToday(this.dt.day);
+    init(etc) {
+      this.setWeekday(etc._date.weekday);
+      this.setThisMonth(etc.monthDays());
+      this.setDate(etc._date.date);
+      this.setMonthsList(etc.allMonths);
+      this.setAllDays(etc.monthDays.length);
+      this.setPrevMonth(etc.prevMonth);
+      this.setNextMonth(etc.nextMonth);
+      this.setWeekDays(etc.weekdays);
+      // this.setToday(etc._date.date);
     },
-    nextMonth() {
-      console.log("going to next month...");
+    goToNextMonth() {
+      this.init(this.nextMonth);
     },
-    prevMonth() {
-      console.log("going to previous month...");
+    goToPrevMonth() {
+      this.init(this.prevMonth);
     },
-    nextYear() {
-      console.log("going to next year...");
-    },
-    prevYear() {
-      console.log("going to previous year...");
-    },
+    // goToNextYear() {
+    //   console.log("going to next year...");
+    // },
+    // goToPrevYear() {
+    //   console.log("going to previous year...");
+    // },
   },
 };
 </script>
