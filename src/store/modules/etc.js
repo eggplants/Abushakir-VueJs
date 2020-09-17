@@ -2,9 +2,12 @@
 // let etc = new $etc(this.dt.year, this.dt.month, this.dt.day)
 // initial state
 const state = () => ({
+    now: {},
     thisMonth: [],
     nextMonth: null,
     prevMonth: null,
+    nextYear: null,
+    prevYear: null,
     today: 0,
     date: {},
     monthGeez: "",
@@ -35,8 +38,14 @@ const mutations = {
     setNextMonth(state, etc) {
         state.nextMonth = etc
     },
+    setNextYear(state, etc) {
+        state.nextYear = etc
+    },
     setPrevMonth(state, etc) {
         state.prevMonth = etc
+    },
+    setPrevYear(state, etc) {
+        state.prevYear = etc
     },
     setToday(state, today) {
         state.today = today
@@ -57,6 +66,9 @@ const mutations = {
     },
     setMonthsList(state, list) {
         state.months = list
+    },
+    setNow(state, now) {
+        state.now = Object.assign({}, now)
     }
 
 }

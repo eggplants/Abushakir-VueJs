@@ -75,9 +75,12 @@ export default {
   },
   methods: {
     ...mapMutations("etc", [
+      "setNow",
       "setThisMonth",
       "setNextMonth",
       "setPrevMonth",
+      "setPrevYear",
+      "setNextYear",
       "setToday",
       "setWeekDays",
       "setDate",
@@ -93,6 +96,8 @@ export default {
       this.setAllDays(etc.monthDays.length);
       this.setPrevMonth(etc.prevMonth);
       this.setNextMonth(etc.nextMonth);
+      this.setPrevYear(etc.prevYear);
+      this.setNextYear(etc.nextYear);
       this.setWeekDays(etc.weekdays);
       this.setToday(etc._date.date);
     },
